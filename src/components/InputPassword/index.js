@@ -1,14 +1,14 @@
 import React from 'react';
-import { TextInput } from 'react-native';
+import { Input } from 'react-native-elements';
 import PropTypes from 'prop-types';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Styles from './styles';
 
 /**
- * 
- * @param {style, onChangeText, value} props
  * @author JOÃO VITOR DA CRUZ.
  * @version 0.0.1
  * @example 
- *  <TextInput
+ *  <InputPassword
       style={style}
       placeholder="Digite sua senha"
       onChangeText={password => onChangeText(password)}
@@ -23,14 +23,17 @@ const InputPassword = props => {
   const { style, onChangeText, value } = props;
 
   return (
-    <TextInput
-      style={style}
+    <Input
+      inputContainerStyle={style.container}
+      inputStyle={style.input}
       placeholder="Digite sua senha"
       onChangeText={password => onChangeText(password)}
       value={value}
       autoCapitalize="none"
       autoCorrect={false}
       secureTextEntry
+      leftIcon={<Icon name="user-circle" size={20} color="#FC6663" />}
+      rightIcon={<Icon name="exclamation-triangle" size={20} color="#ce2029" />}
     />
   );
 };
@@ -56,5 +59,5 @@ InputPassword.propTypes = {
 };
 
 InputPassword.defaultProps = {
-  style: {},
+  style: Styles,
 };

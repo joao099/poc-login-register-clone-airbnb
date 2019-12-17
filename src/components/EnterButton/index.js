@@ -4,7 +4,6 @@ import Styles from './styles';
 import PropTypes from 'prop-types';
 
 /**
- * @param {onPress, isLoading} props
  * @author JOÃO VITOR DA CRUZ.
  * @example
  * <EnterButton

@@ -19,7 +19,9 @@ import ErrorMessage from '../../components/ErrorMessage';
 /**
  * @class
  * @name SignIn
+ * @instance
  * @author JOÃO VITOR DA CRUZ.
+ * @extends PureComponent
  * @version 0.0.1
  * @description Login Page.
  */
@@ -36,6 +38,8 @@ class SignIn extends PureComponent {
       password: '123456',
       error: '',
       isLoading: false,
+      errorEmail: '',
+      showErrorIcon: false,
     };
   }
 
@@ -43,7 +47,6 @@ class SignIn extends PureComponent {
    * @memberof SignUp
    * @method handleEmailChange
    * @function handleEmailChange
-   * @param {String} email - Email to login.
    * @instance
    * @description Method used to change email text.
    */
@@ -54,7 +57,6 @@ class SignIn extends PureComponent {
    * @method handlePasswordChange
    * @instance
    * @function handlePasswordChange
-   * @param {String} password - Password to login.
    * @description Method used to change password text.
    */
   handlePasswordChange = password => this.setState({ password });
@@ -82,7 +84,16 @@ class SignIn extends PureComponent {
     const { navigation } = this.props;
 
     if (!password || !email) {
-      this.setState({ error: 'Preencha usuário e senha para continuar!' });
+      this.setState({
+        error: 'Preencha usuário e senha para continuar!',
+        showErrorIcon: true,
+      });
+
+      return false;
+    }
+
+    if (email.indexOf('@') < 0 || email.indexOf('.com') < 0) {
+      this.setState({ errorEmail: 'Formato do email inválido!' });
 
       return false;
     }
@@ -113,7 +124,14 @@ class SignIn extends PureComponent {
   };
 
   render() {
-    const { email, password, error, isLoading } = this.state;
+    const {
+      email,
+      password,
+      error,
+      isLoading,
+      errorEmail,
+      showErrorIcon,
+    } = this.state;
 
     return (
       <KeyboardAvoidingView
@@ -125,16 +143,19 @@ class SignIn extends PureComponent {
         <StatusBar hidden barStyle="dark-content" />
         <Logo />
         <InputEmail
+          dad="Login"
           onChangeText={this.handleEmailChange}
           value={email}
-          style={Styles.inputEmail}
+          showErrorIcon={showErrorIcon}
         />
+        {errorEmail.length !== 0 && <ErrorMessage>{errorEmail}</ErrorMessage>}
         <InputPassword
           onChangeText={this.handlePasswordChange}
           value={password}
-          style={Styles.inputPassword}
         />
-        {error.length !== 0 && <ErrorMessage>{error}</ErrorMessage>}
+        {error.length !== 0 && (
+          <ErrorMessage pageDad="Login">{error}</ErrorMessage>
+        )}
         <EnterButton
           title="Entrar"
           isLoading={isLoading}

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Styles from './styles';
 
 /**
- * @param {onPress} props
  * @author JOÃO VITOR DA CRUZ.
  * @example
  * <SubTitle

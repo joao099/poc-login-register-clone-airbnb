@@ -1,19 +1,31 @@
 import React from 'react';
-import { TextInput } from 'react-native';
+import { Input } from 'react-native-elements';
 import PropTypes from 'prop-types';
-import Styles from '../../pages/signIn/styles';
+import Styles from './styles';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
+/**
+ * @author JOÃO VITOR DA CRUZ.
+ * @name InputName
+ * @example
+ * <InputName {...props}/>
+ * @version 0.0.1
+ * @description Password Input.
+ */
 const InputName = props => {
   const { onChangeText, style, value } = props;
 
   return (
-    <TextInput
+    <Input
       onChangeText={username => onChangeText(username)}
-      style={style}
+      inputContainerStyle={style.container}
+      inputStyle={style.input}
       placeholder="Digite seu usuário"
       value={value}
       autoCapitalize="none"
       autoCorrect={false}
+      leftIcon={<Icon name="user-circle" size={20} color="#FC6663" />}
+      rightIcon={<Icon name="exclamation-triangle" size={20} color="#ce2029" />}
     />
   );
 };
@@ -39,5 +51,5 @@ InputName.propTypes = {
 };
 
 InputName.defaultProps = {
-  style: Styles.inputEmail,
+  style: Styles,
 };

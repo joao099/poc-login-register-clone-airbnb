@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 const logo = require('../../images/airbnb_logo.png');
 
 /**
- * @param {style} props
  * @author JOÃO VITOR DA CRUZ.
  * @example
  * <Logo

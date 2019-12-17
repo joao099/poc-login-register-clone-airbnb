@@ -6,8 +6,8 @@ const Styles = StyleSheet.create({
     textAlign: 'center',
     color: '#08a092',
     fontSize: 16,
-    marginBottom: heightPercentageToDP('2%'),
     marginHorizontal: widthPercentageToDP('2%'),
+    marginTop: heightPercentageToDP('5%'),
   },
 });
 

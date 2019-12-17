@@ -1,9 +1,11 @@
 import React from 'react';
-import { TextInput } from 'react-native';
+import { Input } from 'react-native-elements';
 import PropTypes from 'prop-types';
+import Styles from './styles';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { heightPercentageToDP } from '../../utils/utils';
 
 /**
- * @param {onChangeText, value, style} props
  * @author JOÃO VITOR DA CRUZ.
  * @version 0.0.1
  * @example
@@ -15,16 +17,27 @@ import PropTypes from 'prop-types';
  * @description - Component responsible for controlling email input.
  */
 const InputEmail = props => {
-  const { onChangeText, value, style } = props;
+  const { onChangeText, value, style, dad, showErrorIcon } = props;
 
   return (
-    <TextInput
+    <Input
       onChangeText={email => onChangeText(email)}
-      style={style}
+      inputContainerStyle={
+        dad === 'Login'
+          ? style.container
+          : { ...style.container, marginTop: heightPercentageToDP('1%') }
+      }
+      inputStyle={style.input}
       placeholder="Digite seu e-mail"
       value={value}
       autoCapitalize="none"
       autoCorrect={false}
+      leftIcon={<Icon name="envelope" size={20} color="#FC6663" />}
+      rightIcon={
+        showErrorIcon && (
+          <Icon name="exclamation-triangle" size={20} color="#ce2029" />
+        )
+      }
     />
   );
 };
@@ -47,8 +60,18 @@ InputEmail.propTypes = {
    * @prop {Object} style - Style of the input text.
    */
   style: PropTypes.object,
+  /**
+   * @prop {String} dad - Parent responsible for component call.
+   */
+  dad: PropTypes.string,
+  /**
+   * @prop {Boolean} showErrorIcon - Responsible for controlling whether or not the error icon should appear.
+   */
+  showErrorIcon: PropTypes.bool,
 };
 
 InputEmail.defaultProps = {
-  style: {},
+  style: Styles,
+  dad: '',
+  showErrorIcon: false,
 };

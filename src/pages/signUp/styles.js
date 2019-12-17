@@ -8,25 +8,6 @@ const Styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
-  inputEmail: {
-    borderRadius: 5,
-    backgroundColor: '#fff',
-    height: heightPercentageToDP('5%'),
-    width: widthPercentageToDP('90%'),
-    textAlign: 'center',
-    marginTop: heightPercentageToDP('1%'),
-  },
-
-  inputPassword: {
-    borderRadius: 5,
-    backgroundColor: '#fff',
-    height: heightPercentageToDP('5%'),
-    width: widthPercentageToDP('90%'),
-    textAlign: 'center',
-    marginTop: heightPercentageToDP('1%'),
-    marginBottom: heightPercentageToDP('3%'),
-  },
 });
 
 export default Styles;

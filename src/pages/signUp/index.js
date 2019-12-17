@@ -2,9 +2,9 @@ import React from 'react';
 import { KeyboardAvoidingView, StatusBar } from 'react-native';
 import Styles from './styles';
 import { heightPercentageToDP } from '../../utils/utils';
-import api from '../../services/api';
 import ErrorMessage from '../../components/ErrorMessage';
 import SucessMessage from '../../components/SucessMessage';
+import AsyncStorage from '@react-native-community/async-storage';
 
 /**
  * COMPONENTES
@@ -20,6 +20,7 @@ import InputName from '../../components/InputName';
  * @class
  * @instance
  * @author JOÃO VITOR DA CRUZ.
+ * @extends PureComponent
  * @description Registration Screen.
  * @version 0.0.1
  */
@@ -33,18 +34,19 @@ class SignUp extends React.PureComponent {
 
     this.state = {
       error: '',
+      errorEmail: '',
       username: '',
       email: '',
       password: '',
       isLoading: false,
       sucess: '',
+      showErrorIcon: false,
     };
   }
 
   /**
    * @memberof SignUp
    * @function handleEmailChange
-   * @param {String} email - Email to register user.
    * @instance
    * @description Method used to change email text.
    */
@@ -54,7 +56,6 @@ class SignUp extends React.PureComponent {
    * @memberof SignUp
    * @instance
    * @function handlePasswordChange
-   * @param {String} password - Password to register user.
    * @description Method used to change password text.
    */
   handlePasswordChange = password => this.setState({ password });
@@ -68,35 +69,50 @@ class SignUp extends React.PureComponent {
   handleCreateAccountPress = async () => {
     const { username, password, email } = this.state;
 
-    if (!username || !password || !email) {
-      this.setState({ error: 'Por favor, preencha todos os campos!' });
+    if (
+      !username ||
+      !password ||
+      !email ||
+      email.indexOf('@') < 0 ||
+      email.indexOf('.com') < 0
+    ) {
+      this.setState({
+        error: 'Por favor, preencha todos os campos!',
+        showErrorIcon: true,
+      });
+
+      return false;
+    }
+
+    if (email.indexOf('@') < 0 || email.indexOf('.com') < 0) {
+      this.setState({ errorEmail: 'Formato do email inválido!' });
 
       return false;
     }
 
     this.setState({ isLoading: true });
 
+    const user = {
+      username,
+      password,
+      email,
+    };
+
     try {
-      await api.post('/users', {
-        username,
-        email,
-        password,
-      });
+      await AsyncStorage.setItem('@AirbnbApp:user', JSON.stringify(user));
 
       this.setState({
         sucess: 'Conta criada com sucesso! Redirecionando para o login',
         error: '',
+        errorEmail: '',
       });
 
-      setTimeout(this.handleBackToLoginPress, 2500);
+      setTimeout(this.handleBackToLoginPress, 3000);
     } catch (err) {
       this.setState({
-        error:
-          'Houve um problema com o cadastro, verifique os dados preenchidos!',
+        error: 'Erro ao criar conta, por favor verifique os campos informados',
       });
     }
-
-    this.setState({ isLoading: false });
   };
 
   /**
@@ -116,13 +132,21 @@ class SignUp extends React.PureComponent {
    * @memberof SignUp
    * @instance
    * @function handleNameChange
-   * @param {String} username - Username to register user.
    * @description Responsible for text exchange.
    */
   handleNameChange = username => this.setState({ username });
 
   render() {
-    const { error, email, password, isLoading, username, sucess } = this.state;
+    const {
+      error,
+      email,
+      password,
+      isLoading,
+      username,
+      sucess,
+      errorEmail,
+      showErrorIcon,
+    } = this.state;
 
     return (
       <KeyboardAvoidingView
@@ -134,16 +158,20 @@ class SignUp extends React.PureComponent {
         <StatusBar hidden barStyle="dark-content" />
         <Logo />
         {sucess.length !== 0 && <SucessMessage>{sucess}</SucessMessage>}
-        <InputName onChangeText={this.handleNameChange} value={username} />
+        <InputName
+          showRightIcon={true}
+          onChangeText={this.handleNameChange}
+          value={username}
+        />
         <InputEmail
           onChangeText={this.handleEmailChange}
           value={email}
-          style={Styles.inputEmail}
+          showErrorIcon={showErrorIcon}
         />
+        {errorEmail.length > 0 && <ErrorMessage>{errorEmail}</ErrorMessage>}
         <InputPassword
           onChangeText={this.handlePasswordChange}
           value={password}
-          style={Styles.inputPassword}
         />
         {error.length !== 0 && <ErrorMessage>{error}</ErrorMessage>}
         <EnterButton
